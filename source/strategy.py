@@ -1,6 +1,5 @@
 import alpaca_trade_api as tradeapi
 import requests, json, statistics
-from pprint import pprint
 from config import * 
 
 BASE_URL = "https://paper-api.alpaca.markets"
@@ -28,13 +27,34 @@ def bollinger_bands(api, stock):
 
 def standard_deviation(api, stock):
     close_list = []
+
     ma = api.get_barset(stock, "1D", 20)
     barset = ma[stock]
     for bar in barset:
         close_list.append(bar.c)
 
     return statistics.pstdev(close_list)
+
+def stochastics(api, stock):
+    L14 = float('inf')
+    H14 = float('-inf')
+    L3 = float('inf')
+    H3 = float('-inf')
+
+    k_ma = api.get_barset(stock, "1D", 14)
+    k_barset = k_ma[stock]
+
+    CP = k_barset[-1].c
+
+    for bar in k_barset:
+        if bar.l < L14:
+            L14 = bar.l
+        if bar.h > H14:
+            H14 = bar.h
+
+    slow = 100 * (CP - L14) / (H14 - L14)
+
 if __name__ == "__main__":
     api = tradeapi.REST(API_KEY, SEC_KEY, BASE_URL)
-    print(bollinger_bands(api, "MSFT"))
+    print(stochastics(api, "MSFT"))
     print("EOF")
