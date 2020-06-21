@@ -36,25 +36,40 @@ def standard_deviation(api, stock):
     return statistics.pstdev(close_list)
 
 def stochastics(api, stock):
+    ma = api.get_barset(stock, "1D", 16)
+    barset = ma[stock]
+    k = calc_stoch(barset, 0)
+
+    d0 = calc_stoch(barset, 1)
+    d1 = calc_stoch(barset, 2)
+    d2 = calc_stoch(barset, 3)
+    
+    d = (d0+d1+d2)/3
+
+    return (d, k)
+
+def calc_stoch(barset, offset):
     L14 = float('inf')
     H14 = float('-inf')
-    L3 = float('inf')
-    H3 = float('-inf')
+    offset = -offset
+    CP = barset[-1].c
 
-    k_ma = api.get_barset(stock, "1D", 14)
-    k_barset = k_ma[stock]
-
-    CP = k_barset[-1].c
-
-    for bar in k_barset:
+    if offset == 0:
+     for bar in barset[-14:]:
         if bar.l < L14:
             L14 = bar.l
         if bar.h > H14:
             H14 = bar.h
 
-    slow = 100 * (CP - L14) / (H14 - L14)
+    else:       
+        for bar in barset[-14+offset:offset]:
+            if bar.l < L14:
+                L14 = bar.l
+            if bar.h > H14:
+                H14 = bar.h
+
+    return 100 * (CP - L14) / (H14 - L14)
 
 if __name__ == "__main__":
     api = tradeapi.REST(API_KEY, SEC_KEY, BASE_URL)
-    print(stochastics(api, "MSFT"))
     print("EOF")
