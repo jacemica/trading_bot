@@ -1,9 +1,4 @@
-import alpaca_trade_api as tradeapi
-import requests, json, statistics
-from config import * 
-
-BASE_URL = "https://paper-api.alpaca.markets"
-STOCKS = ["INTC", "AMD", "NVDA", "IBM", "WDC", "AAPL", "FB", "MSFT", "AMZN", "NFLX", "TWTR", "CRM", "DBX", "WORK", "TWLO", "SQ", "PYPL", "CSCO", "ADBE", "SNE", "NTODY", "LYFT", "UBER", "TSLA", "WFC", "JPM", "BAC", "AXP", "MA", "V", "DIS", "TGT", "WMT", "NKE", "KO", "KHC", "SBUX", "GRUB"]
+import statistics
 
 def moving_average(api, stock, days):
     barSum = 0
@@ -55,12 +50,11 @@ def calc_stoch(barset, offset):
     CP = barset[-1].c
 
     if offset == 0:
-     for bar in barset[-14:]:
-        if bar.l < L14:
-            L14 = bar.l
-        if bar.h > H14:
-            H14 = bar.h
-
+        for bar in barset[-14:]:
+            if bar.l < L14:
+                L14 = bar.l
+            if bar.h > H14:
+                H14 = bar.h
     else:       
         for bar in barset[-14+offset:offset]:
             if bar.l < L14:
@@ -69,7 +63,3 @@ def calc_stoch(barset, offset):
                 H14 = bar.h
 
     return 100 * (CP - L14) / (H14 - L14)
-
-if __name__ == "__main__":
-    api = tradeapi.REST(API_KEY, SEC_KEY, BASE_URL)
-    print("EOF")
