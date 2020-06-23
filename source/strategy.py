@@ -56,7 +56,7 @@ if __name__ == "__main__":
                 t = 'limit'
                 tif = 'day'
                 qty = math.floor(capital / 3.33 / stocks_dict[stock][-1])
-                limit_price = stocks_dict[stock][-1] + 5
+                limit_price = stocks_dict[stock][-1] + 2
 
                 order = api.submit_order(symbol, qty, side, t, tif, limit_price)
                 print(str(qty) + " shares of " + symbol + " purchased!")
