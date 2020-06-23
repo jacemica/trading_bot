@@ -1,4 +1,4 @@
-import statistics
+import statistics, json, urllib.request, urllib.parse
 
 def moving_average(api, stock, days):
     barSum = 0
@@ -31,35 +31,29 @@ def standard_deviation(api, stock):
     return statistics.pstdev(close_list)
 
 def stochastics(api, stock):
-    ma = api.get_barset(stock, "1D", 16)
+    ma = api.get_barset(stock, "1D", 14)
     barset = ma[stock]
     k = calc_stoch(barset, 0)
 
-    d0 = calc_stoch(barset, 1)
-    d1 = calc_stoch(barset, 2)
-    d2 = calc_stoch(barset, 3)
-    
-    d = (d0+d1+d2)/3
+    return k
 
-    return (d, k)
+def av_stochastics(av_key, stock, date):
+    URL = "https://www.alphavantage.co/query?function=STOCH&symbol={}&interval=daily&fastkperiod=14&apikey={}".format(stock, av_key)
+    response = urllib.request.urlopen(URL)
+    json_text = response.read().decode(encoding = 'utf-8')
+    response.close()
+
+    return json.loads(json_text)["Technical Analysis: STOCH"][date]
 
 def calc_stoch(barset, offset):
     L14 = float('inf')
     H14 = float('-inf')
-    offset = -offset
     CP = barset[-1].c
 
-    if offset == 0:
-        for bar in barset[-14:]:
-            if bar.l < L14:
-                L14 = bar.l
-            if bar.h > H14:
-                H14 = bar.h
-    else:       
-        for bar in barset[-14+offset:offset]:
-            if bar.l < L14:
-                L14 = bar.l
-            if bar.h > H14:
-                H14 = bar.h
+    for bar in barset:
+        if bar.l < L14:
+            L14 = bar.l
+        if bar.h > H14:
+            H14 = bar.h         
 
     return 100 * (CP - L14) / (H14 - L14)
