@@ -23,7 +23,7 @@ if __name__ == "__main__":
 
     stocks_dict = find_stocks(api, STOCKS, date)
     print("\nPotential stocks: \n", stocks_dict, '\n')
-
+    
     check_buy(api, stocks_dict)
     
     print("Program Terminated")
