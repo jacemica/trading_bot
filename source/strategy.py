@@ -12,17 +12,18 @@ if __name__ == "__main__":
     STOCKS = combine_STOCKS(STOCKS, get_SPY())
     
     date = datetime.date.today()
-    pre_market = get_tomorrow(date)
+    pre_market = get_open(date)
+    print(pre_market)
 
     while datetime.datetime.now() < pre_market:
         print("Waiting for pre-markets...")
         time.sleep(900)
 
-    check_sell(api)
+    # check_sell(api)
 
-    stocks_dict = find_stocks(api, STOCKS, date)
-    print("\nPotential stocks: \n", stocks_dict, '\n')
+    # stocks_dict = find_stocks(api, STOCKS, date)
+    # print("\nPotential stocks: \n", stocks_dict, '\n')
 
-    check_buy(api, stocks_dict)
+    # check_buy(api, stocks_dict)
     
     print("Program Terminated")

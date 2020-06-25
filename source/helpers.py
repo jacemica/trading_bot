@@ -98,10 +98,16 @@ def combine_STOCKS(STOCKS, SPY):
 
     return STOCKS
 
-def get_tomorrow(date):
+def get_open(date):
     Y = int(date.strftime("%Y"))
     M = int(date.strftime("%m"))
     D = int(date.strftime("%d"))
-    pre_market = datetime.datetime(Y, M, D, 5, 30) + datetime.timedelta(days=1)
+
+    if datetime.datetime.now() < datetime.datetime(Y, M, D, 5):
+        print("Executed morning of")
+        pre_market = datetime.datetime(Y, M, D, 5)
+
+    print("Executed night before")
+    pre_market = datetime.datetime(Y, M, D, 5) + datetime.timedelta(days=1)
 
     return pre_market
