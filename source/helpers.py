@@ -10,15 +10,12 @@ def check_buy(api, stocks_dict):
         try:
             for stock in sorted(stocks_dict):
                 symbol = stocks_dict[stock][0]
-                side = 'buy'
-                t = 'limit'
-                tif = 'day'
                 qty = math.floor(float(capital) / 10 / stocks_dict[stock][-1])
                 
                 limit_price = stocks_dict[stock][-1] + 2
 
                 if (len(api.list_positions()) < 10) and (symbol not in positions):
-                    order = api.submit_order(symbol, qty, side, t, tif, limit_price)
+                    order = api.submit_order(symbol=symbol, qty=qty, side='buy', type='limit', time_in_force='day', limit_price=limit_price, extended_hours=True)
                     print(order, '\n')
                     print(str(qty) + " shares of " + str(symbol) + " purchased!")
 
@@ -42,7 +39,7 @@ def check_sell(api):
 
         if (st_fast > 70) and (MACD < 0):
             print("Selling position: " + position.symbol)
-            order = api.submit_order(symbol=position.symbol, qty=position.qty, side="sell", type="limit", time_in_force="day", limit_price=float(position.current_price)-2)
+            order = api.submit_order(symbol=position.symbol, qty=position.qty, side="sell", type="limit", time_in_force="day", limit_price=float(position.current_price)-2, extended_hours=True)
             print(order)
 
         print("API Cooldown for 1 Minute")
