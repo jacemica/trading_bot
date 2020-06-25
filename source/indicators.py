@@ -30,30 +30,31 @@ def standard_deviation(api, stock):
 
     return statistics.pstdev(close_list)
 
-def stochastics(api, stock):
-    ma = api.get_barset(stock, "1D", 14)
-    barset = ma[stock]
-    k = calc_stoch(barset, 0)
-
-    return k
-
-def av_stochastics(av_key, stock, date):
+def av_stochastics(av_key, stock):
     URL = "https://www.alphavantage.co/query?function=STOCH&symbol={}&interval=daily&fastkperiod=14&apikey={}".format(stock, av_key)
     response = urllib.request.urlopen(URL)
     json_text = response.read().decode(encoding = 'utf-8')
     response.close()
 
-    return json.loads(json_text)["Technical Analysis: STOCH"][date]
+    date = list(json.loads(json_text)["Technical Analysis: STOCH"].keys())[0] 
+    try:
+        return json.loads(json_text)["Technical Analysis: STOCH"][date]
+    except Exception as e:
+        print("Error: " , e)
+        return {'SlowK':99, 'SlowD':99}
 
-def calc_stoch(barset, offset):
-    L14 = float('inf')
-    H14 = float('-inf')
-    CP = barset[-1].c
-
-    for bar in barset:
-        if bar.l < L14:
-            L14 = bar.l
-        if bar.h > H14:
-            H14 = bar.h         
-
-    return 100 * (CP - L14) / (H14 - L14)
+def macd(av_key, stock):
+    URL = "https://www.alphavantage.co/query?function=MACD&symbol={}&interval=daily&series_type=close&apikey={}".format(stock, av_key)
+    response = urllib.request.urlopen(URL)
+    json_text = response.read().decode(encoding = 'utf-8')
+    response.close()
+    
+    date = list(json.loads(json_text)["Technical Analysis: MACD"].keys())[0] 
+    try:
+        return json.loads(json_text)["Technical Analysis: MACD"][date]["MACD_Hist"]
+    except Exception as e:
+        print("Error: ", e)
+        return 0
+    
+    
+    
