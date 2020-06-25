@@ -4,6 +4,7 @@ from indicators import *
 
 def check_buy(api, stocks_dict):
     capital = api.get_account().buying_power
+    positions = [position.symbol for position in api.list_positions()]
 
     if len(stocks_dict) != 0:
         try:
@@ -12,17 +13,17 @@ def check_buy(api, stocks_dict):
                 side = 'buy'
                 t = 'limit'
                 tif = 'day'
-                qty = math.floor(float(capital) / 3.33 / stocks_dict[stock][-1])
+                qty = math.floor(float(capital) / 10 / stocks_dict[stock][-1])
                 
                 limit_price = stocks_dict[stock][-1] + 2
 
-                if len(api.list_positions()) < 10:
+                if (len(api.list_positions()) < 10) and (symbol not in positions):
                     order = api.submit_order(symbol, qty, side, t, tif, limit_price)
                     print(order, '\n')
                     print(str(qty) + " shares of " + str(symbol) + " purchased!")
 
                 else:
-                    print("DID NOT SUBMIT ORDER - PORTFOLIO FULL")
+                    print("DID NOT SUBMIT ORDER - PORTFOLIO FULL\ALREADY OWNED")
 
         except Exception as e:
             print("COULD NOT SUBMIT ORDER")

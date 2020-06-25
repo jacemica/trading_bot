@@ -10,7 +10,7 @@ STOCKS = ["INTC", "AMD", "NVDA", "IBM", "WDC", "AAPL", "FB", "MSFT", "AMZN", "NF
 if __name__ == "__main__":
     api = tradeapi.REST(API_KEY, SEC_KEY, BASE_URL)
     STOCKS = combine_STOCKS(STOCKS, get_SPY())
-    
+  
     date = datetime.date.today()
     pre_market = get_open(date)
     print(pre_market)
