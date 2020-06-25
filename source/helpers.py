@@ -3,7 +3,7 @@ from config import *
 from indicators import *
 
 def check_buy(api, stocks_dict):
-    capital = api.get_account().buying_power
+    capital = api.get_account().cash
     positions = [position.symbol for position in api.list_positions()]
 
     if len(stocks_dict) != 0:
@@ -66,7 +66,7 @@ def find_stocks(api, STOCKS, date_object):
             price = ma[0].c
             b = ((bb[1] - bb[0]) * 0.33) + bb[0]
 
-            if (price < b) and (st_fast < 25):
+            if (gc) and (price < b) and (st_fast < 25):
                 print(stock + " shows potential!")
                 potential_buys[st_fast] = (stock, price)
 
