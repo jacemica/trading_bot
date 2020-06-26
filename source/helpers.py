@@ -10,12 +10,12 @@ def check_buy(api, stocks_dict):
         try:
             for stock in sorted(stocks_dict):
                 symbol = stocks_dict[stock][0]
-                qty = math.floor(float(capital) / 10 / stocks_dict[stock][-1])
+                qty = int((math.floor(float(capital)) / (10-len(positions)) / (stocks_dict[stock][-1])))
                 
                 limit_price = stocks_dict[stock][-1] + 2
 
                 if (len(api.list_positions()) < 10) and (symbol not in positions):
-                    order = api.submit_order(symbol=symbol, qty=qty, side='buy', type='limit', time_in_force='day', limit_price=limit_price, extended_hours=True)
+                    # order = api.submit_order(symbol=symbol, qty=qty, side='buy', type='limit', time_in_force='day', limit_price=limit_price, extended_hours=True)
                     print(order, '\n')
                     print(str(qty) + " shares of " + str(symbol) + " purchased!")
 
@@ -35,9 +35,10 @@ def check_sell(api):
     for position in positions:
         st = av_stochastics(AV_KEY, position.symbol)
         st_fast = float(st['SlowK'])
-        MACD = macd(AV_KEY, position.symbol)
-
-        if (st_fast > 70) and (MACD < 0):
+        st_slow = float(st['SlowD'])
+        MACD = float(macd(AV_KEY, position.symbol))
+        
+        if ((st_fast>75) and (st_fast<st_slow)) or ((st_fast>70) and (MACD<=0)):
             print("Selling position: " + position.symbol)
             order = api.submit_order(symbol=position.symbol, qty=position.qty, side="sell", type="limit", time_in_force="day", limit_price=float(position.current_price)-2, extended_hours=True)
             print(order)
@@ -54,16 +55,19 @@ def find_stocks(api, STOCKS, date_object):
         if counter < 5:
             print("Analyzing " + stock + " " + str(idx+1) + " of " + str(len(STOCKS)))
             counter += 1
+
             gc = is_golden_cross(api, stock)
             bb = bollinger_bands(api, stock)
+            b = ((bb[1] - bb[0]) * 0.33) + bb[0]
+
             st = av_stochastics(AV_KEY, stock) 
             st_fast = float(st['SlowK'])
             st_slow = float(st['SlowD'])
+
             ma = api.get_barset(stock, "1D", 1)[stock]
             price = ma[0].c
-            b = ((bb[1] - bb[0]) * 0.33) + bb[0]
 
-            if (gc) and (price < b) and (st_fast < 25):
+            if ((gc) and (st_fast<20)) or ((price<b) and (st_fast<20)):
                 print(stock + " shows potential!")
                 potential_buys[st_fast] = (stock, price)
 
