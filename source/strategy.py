@@ -9,7 +9,7 @@ myPicks = ["INTC", "AMD", "NVDA", "IBM", "WDC", "AAPL", "FB", "MSFT", "AMZN", "N
 
 if __name__ == "__main__":
     api = tradeapi.REST(API_KEY, SEC_KEY, BASE_URL)
-    STOCKS = combine_STOCKS(myPicks, get_SPY())
+    # STOCKS = combine_STOCKS(myPicks, get_SPY())
   
     date = datetime.date.today()
     pre_market = get_open(date)
@@ -20,9 +20,9 @@ if __name__ == "__main__":
     #     time.sleep(900)
 
     # check_sell(api)
-    STOCKS = ["WFC", "INTC", "AMD", "AAPL"]
+    STOCKS = ["INTC", "AMD", "NVDA", "IBM", "WDC", "AAPL", "FB", "MSFT", "AMZN", "NFLX", "TWTR", "CRM", "DBX", "WORK", "TWLO"]
     stocks_dict = find_stocks(api, STOCKS, date)
-    print("\nPotential stocks: \n", sorted(stocks_dict), '\n')
+    print("\nPotential stocks: \n", sorted(stocks_dict.items()), '\n')
     
     check_buy(api, stocks_dict)
     
