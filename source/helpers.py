@@ -1,6 +1,8 @@
 import time, datetime, pickle, requests, bs4, math
 from config import *
 from indicators import *
+from pandas_datareader import data
+from collections import OrderedDict 
 
 def check_buy(api, stocks_dict):
     capital = api.get_account().cash
@@ -9,13 +11,13 @@ def check_buy(api, stocks_dict):
 
     if len(stocks_dict) != 0:
         try:
-            for stock in sorted(stocks_dict):
+            for stock in stocks_dict:
                 symbol = stocks_dict[stock][0]
                 qty = int((math.floor(float(capital)) / (10-len(positions)) / (stocks_dict[stock][-1])))
                 
                 limit_price = stocks_dict[stock][-1] + 2
 
-                if ((len(api.list_positions()) + len(api.list_orders())) < 10) and ((symbol not in positions) and symbol not in orders):
+                if ((len(api.list_positions()) + len(api.list_orders())) < 10) and ((symbol not in positions) and (symbol not in orders)):
                     order = api.submit_order(symbol=symbol, qty=qty, side='buy', type='limit', time_in_force='day', limit_price=limit_price, extended_hours=True)
                     print(order, '\n')
                     print(str(qty) + " shares of " + str(symbol) + " purchased!")
@@ -50,31 +52,37 @@ def check_sell(api):
 
 def find_stocks(api, STOCKS, date_object):
     potential_buys = {}
-   
+
     for idx, stock in enumerate(STOCKS):
-        if idx%5==0 and idx>0:
-            print("API Cooldown for 1 Minute")
-            for i in range(60,0,-1):
-                time.sleep(1)
+        try:
+            if idx%5==0 and idx>0:
+                print("API Cooldown for 1 Minute")
+                for i in range(60,0,-1):
+                    time.sleep(1)
 
-        print("Analyzing " + stock + " " + str(idx+1) + " of " + str(len(STOCKS)))
+            print("Analyzing " + stock + " " + str(idx+1) + " of " + str(len(STOCKS)))
 
-        gc = is_golden_cross(api, stock)
-        bb = bollinger_bands(api, stock)
-        b = ((bb[1] - bb[0]) * 0.33) + bb[0]
+            gc = is_golden_cross(api, stock)
+            bb = bollinger_bands(api, stock)
+            b = ((bb[1] - bb[0]) * 0.33) + bb[0]
 
-        st = av_stochastics(AV_KEY, stock) 
-        st_fast = float(st['SlowK'])
-        st_slow = float(st['SlowD'])
+            st = av_stochastics(AV_KEY, stock) 
+            st_fast = float(st['SlowK'])
+            st_slow = float(st['SlowD'])
 
-        ma = api.get_barset(stock, "1D", 1)[stock]
-        price = ma[0].c
+            ma = api.get_barset(stock, "1D", 1)[stock]
+            price = ma[0].c
+            marketCap = data.get_quote_yahoo(stock)['marketCap'][-1]
 
-        if ((gc) and (st_fast<20)) or ((price<b) and (st_fast<20)):
-            print(stock + " shows potential!")
-            potential_buys[st_fast] = (stock, price)
+            if ((gc) and (st_fast<20)) or ((price<b) and (st_fast<20)):
+                print(stock + " shows potential!")
+                potential_buys[marketCap] = (stock, price)
+
+        except Exception as e:
+            print("API Error")
+            print(e)
     
-    return potential_buys
+    return OrderedDict(sorted(potential_buys.items(), reverse=True)) 
 
 def get_SPY():
     resp = requests.get('https://en.wikipedia.org/wiki/S%26P_100#Components')
