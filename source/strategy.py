@@ -19,11 +19,11 @@ if __name__ == "__main__":
         print("Waiting for pre-markets...")
         time.sleep(900)
 
-    check_sell(api)
+    if not check_sell(api):
+        stocks_dict = find_stocks(api, STOCKS, date)
+        print("\nPotential stocks: \n", stocks_dict, '\n')
 
-    stocks_dict = find_stocks(api, STOCKS, date)
-    print("\nPotential stocks: \n", stocks_dict, '\n')
-
-    check_buy(api, stocks_dict)    
+        check_buy(api, stocks_dict)    
     
     print("Program Terminated")
+    sys.exit(0)

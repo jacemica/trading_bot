@@ -32,6 +32,7 @@ def check_buy(api, stocks_dict):
         print("No stocks fit criteria")
 
 def check_sell(api):
+    sell_flag = 0
     print("Checking for positions to sell")
     positions = api.list_positions()
 
@@ -42,6 +43,7 @@ def check_sell(api):
         MACD = float(macd(AV_KEY, position.symbol))
 
         if ((st_fast>75) and (st_fast<st_slow)) or ((st_fast>70) and (MACD<=0)):
+            sell_flag = 1
             print("Selling position: " + position.symbol)
             order = api.submit_order(symbol=position.symbol, qty=position.qty, side="sell", type="limit", time_in_force="day", limit_price=float(position.current_price)-2, extended_hours=True)
             print(order)
@@ -49,6 +51,8 @@ def check_sell(api):
         print("API Cooldown for 1 Minute")
         for i in range(60,0,-1):
                 time.sleep(1)
+
+    return sell_flag
 
 def find_stocks(api, STOCKS, date_object):
     potential_buys = {}
