@@ -26,4 +26,4 @@ if __name__ == "__main__":
         check_buy(api, stocks_dict)    
     
     print("Program Terminated")
-    sys.exit(0)
+    input("Press ENTER to exit")
