@@ -9,7 +9,7 @@ def check_buy(api, stocks_dict):
     positions = [position.symbol for position in api.list_positions()]
     orders = [order.symbol for order in api.list_orders()]
 
-    if len(stocks_dict) != 0:
+    if (len(stocks_dict) != 0) and (len(positions) < 10):
         try:
             for stock in stocks_dict:
                 symbol = stocks_dict[stock][0]
@@ -23,13 +23,13 @@ def check_buy(api, stocks_dict):
                     print(str(qty) + " shares of " + str(symbol) + " purchased!")
 
                 else:
-                    print("DID NOT SUBMIT ORDER - PORTFOLIO FULL\ALREADY OWNED")
+                    print("DID NOT SUBMIT ORDER - PORTFOLIO FULL/ALREADY OWNED")
 
         except Exception as e:
             print("COULD NOT SUBMIT ORDER")
             print(e)
     else:
-        print("No stocks fit criteria")
+        print("No stocks fit criteria/Portfolio Full")
 
 def check_sell(api):
     sell_flag = 0
@@ -37,6 +37,7 @@ def check_sell(api):
     positions = api.list_positions()
 
     for position in positions:
+        print("Analyzing " + str(position.symbol))
         st = av_stochastics(AV_KEY, position.symbol)
         st_fast = float(st['SlowK'])
         st_slow = float(st['SlowD'])
@@ -51,6 +52,9 @@ def check_sell(api):
         print("API Cooldown for 1 Minute")
         for i in range(60,0,-1):
                 time.sleep(1)
+
+    if sell_flag == 0:
+        print("No positions to sell at this time")
 
     return sell_flag
 
