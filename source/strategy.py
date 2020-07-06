@@ -15,9 +15,9 @@ if __name__ == "__main__":
     pre_market = get_open(date)
     print(pre_market)
 
-    while datetime.datetime.now() < pre_market:
-        print("Waiting for pre-markets...")
-        time.sleep(900)
+    # while datetime.datetime.now() < pre_market:
+    #     print("Waiting for pre-markets...")
+    #     time.sleep(900)
 
     if not check_sell(api):
         stocks_dict = find_stocks(api, STOCKS, date)

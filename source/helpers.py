@@ -121,8 +121,8 @@ def get_open(date):
     if datetime.datetime.now() < datetime.datetime(Y, M, D, 5):
         print("Executed morning of")
         pre_market = datetime.datetime(Y, M, D, 5)
-
-    print("Executed night before")
-    pre_market = datetime.datetime(Y, M, D, 5) + datetime.timedelta(days=1)
+    else:
+        print("Executed night before")
+        pre_market = datetime.datetime(Y, M, D, 5) + datetime.timedelta(days=1)
 
     return pre_market
