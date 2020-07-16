@@ -24,7 +24,7 @@ if __name__ == "__main__":
     print("\nPotential stocks: \n", stocks_dict, '\n')    
 
     while len(api.list_orders()) > 0:
-        print("Cannot buy stucks until sell orders executed")
+        print("Cannot buy stocks until sell orders executed")
         time.sleep(5)
 
     check_buy(api, stocks_dict)
