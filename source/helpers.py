@@ -56,8 +56,6 @@ def check_sell(api):
     if sell_flag == 0:
         print("No positions to sell at this time")
 
-    return sell_flag
-
 def find_stocks(api, STOCKS, date_object):
     potential_buys = {}
 
