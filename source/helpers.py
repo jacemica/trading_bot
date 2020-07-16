@@ -43,7 +43,11 @@ def check_sell(api):
         st_slow = float(st['SlowD'])
         MACD = float(macd(AV_KEY, position.symbol))
 
-        if ((st_fast>75) and (st_fast<st_slow)) or ((st_fast>70) and (MACD<=0)):
+        print(st_fast)
+        print(st_slow)
+        print(MACD)
+
+        if ((st_fast>50) and (MACD<=0)): # (st_fast>75) and (st_fast<=st_slow)):
             sell_flag = 1
             print("Selling position: " + position.symbol)
             order = api.submit_order(symbol=position.symbol, qty=position.qty, side="sell", type="limit", time_in_force="day", limit_price=float(position.current_price)-2, extended_hours=True)
@@ -53,7 +57,7 @@ def check_sell(api):
         for i in range(60,0,-1):
                 time.sleep(1)
 
-    if sell_flag == 0:
+    if not sell_flag:
         print("No positions to sell at this time")
 
 def find_stocks(api, STOCKS, date_object):
@@ -68,7 +72,7 @@ def find_stocks(api, STOCKS, date_object):
 
             print("Analyzing " + stock + " " + str(idx+1) + " of " + str(len(STOCKS)))
 
-            gc = is_golden_cross(api, stock)
+            # gc = is_golden_cross(api, stock)
             bb = bollinger_bands(api, stock)
             b = ((bb[1] - bb[0]) * 0.33) + bb[0]
 
@@ -79,8 +83,8 @@ def find_stocks(api, STOCKS, date_object):
             ma = api.get_barset(stock, "1D", 1)[stock]
             price = ma[0].c
             marketCap = data.get_quote_yahoo(stock)['marketCap'][-1]
-
-            if ((gc) and (st_fast<20)) or ((price<b) and (st_fast<20)):
+    
+            if ((price < b) and (15 < st_fast < 25) and (st_slow < st_fast)):
                 print(stock + " shows potential!")
                 potential_buys[marketCap] = (stock, price)
 
