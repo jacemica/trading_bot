@@ -20,20 +20,18 @@ class TestStrategy(bt.Strategy):
         self.mfast = self.macd.macd
         self.mslow = self.macd.signal
 
-
         self.bb = btind.BBands(self.datas[0])
         self.b = ((self.bb.mid - self.bb.bot) * 0.3) + self.bb.bot
 
-        self.shares = 39
+        self.shares = 28
 
     def next(self):
         # Simply log the closing price of the series from the reference
         self.log('Close, %.2f' % self.dataclose[0])
         if not self.position:
-            # if (self.dataclose < self.b) and (self.stochfast <= 25 and self.stochfast >= self.stochslow):
-            if self.stochfast <= 25 and self.stochfast > self.stochslow and self.dataclose[0] < self.b:
+            if self.stochfast <= 25 and self.stochslow <= self.stochfast and self.dataclose <= self.b:
                 self.order = self.buy(size = self.shares)
         
         else:
-            if (self.stochfast >= 65) and (self.mfast - self.mslow <= 0):
+            if (self.stochfast >= 65) and (self.mfast - self.mslow <= -.2):
                 self.order = self.sell(size = self.shares)
