@@ -47,7 +47,7 @@ def check_sell(api):
         print(st_slow)
         print(MACD)
 
-        if ((st_fast>50) and (MACD<=0)): # (st_fast>75) and (st_fast<=st_slow)):
+        if ((st_fast>=60) and (MACD<=0)): # (st_fast>75) and (st_fast<=st_slow)):
             sell_flag = 1
             print("Selling position: " + position.symbol)
             order = api.submit_order(symbol=position.symbol, qty=position.qty, side="sell", type="limit", time_in_force="day", limit_price=float(position.current_price)-2, extended_hours=True)
@@ -84,7 +84,7 @@ def find_stocks(api, STOCKS, date_object):
             price = ma[0].c
             marketCap = data.get_quote_yahoo(stock)['marketCap'][-1]
     
-            if ((price < b) and (15 < st_fast < 25) and (st_slow < st_fast)):
+            if ((price < b) and (st_fast <= 25) and (st_slow <= st_fast)):
                 print(stock + " shows potential!")
                 potential_buys[marketCap] = (stock, price)
 

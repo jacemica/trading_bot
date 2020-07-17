@@ -10,7 +10,7 @@ def moving_average(api, stock, days):
     return barSum/days
 
 def is_golden_cross(api, stock):
-    return 0 < (moving_average(api, stock, 50)-moving_average(api, stock, 200)) < 1
+    return 0 < (moving_average(api, stock, 50)-moving_average(api, stock, 200)) < 3
 
 def bollinger_bands(api, stock):
     sma = moving_average(api, stock, 20)
