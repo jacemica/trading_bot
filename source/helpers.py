@@ -47,7 +47,7 @@ def check_sell(api):
         print(st_slow)
         print(MACD)
 
-        if ((st_fast>=65) and (MACD<=0)): # (st_fast>75) and (st_fast<=st_slow)):
+        if ((st_fast>=65) and (MACD<=-.2)): # (st_fast>75) and (st_fast<=st_slow)):
             sell_flag = 1
             print("Selling position: " + position.symbol)
             order = api.submit_order(symbol=position.symbol, qty=position.qty, side="sell", type="limit", time_in_force="day", limit_price=float(position.current_price)-2, extended_hours=True)
