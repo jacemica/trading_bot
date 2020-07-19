@@ -1,4 +1,4 @@
-import time, datetime, pickle, requests, bs4, math
+import time, datetime, pickle, requests, bs4, math 
 from config import *
 from indicators import *
 from pandas_datareader import data
