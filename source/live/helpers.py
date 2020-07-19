@@ -38,16 +38,13 @@ def check_sell(api):
 
     for position in positions:
         print("Analyzing " + str(position.symbol))
-        st = av_stochastics(AV_KEY, position.symbol)
-        st_fast = float(st['SlowK'])
-        st_slow = float(st['SlowD'])
-        MACD = float(macd(AV_KEY, position.symbol))
 
-        print(st_fast)
-        print(st_slow)
-        print(MACD)
+        technical_indicator = REDACTED
+        technical_indicator = REDACTED
+        technical_indicator = REDACTED
+        technical_indicator = REDACTED
 
-        if ((st_fast>=65) and (MACD<=-.2)):
+        if (technical_indicator) and (technical_indicator) and (technical_indicator):
             sell_flag = 1
             print("Selling position: " + position.symbol)
             order = api.submit_order(symbol=position.symbol, qty=position.qty, side="sell", type="limit", time_in_force="day", limit_price=float(position.current_price)-2, extended_hours=True)
@@ -72,19 +69,19 @@ def find_stocks(api, STOCKS, date_object):
 
             print("Analyzing " + stock + " " + str(idx+1) + " of " + str(len(STOCKS)))
 
-            # gc = is_golden_cross(api, stock)
-            bb = bollinger_bands(api, stock)
-            b = ((bb[1] - bb[0]) * 0.33) + bb[0]
+            technical_indicator = REDACTED
+            technical_indicator = REDACTED
+            technical_indicator = REDACTED
 
-            st = av_stochastics(AV_KEY, stock) 
-            st_fast = float(st['SlowK'])
-            st_slow = float(st['SlowD'])
+            technical_indicator = REDACTED
+            technical_indicator = REDACTED
+            technical_indicator = REDACTED
 
-            ma = api.get_barset(stock, "1D", 1)[stock]
-            price = ma[0].c
-            marketCap = data.get_quote_yahoo(stock)['marketCap'][-1]
-    
-            if ((price < b) and (st_fast <= 25) and (st_slow <= st_fast)):
+            technical_indicator = REDACTED
+            technical_indicator = REDACTED
+            technical_indicator = REDACTED
+
+            if (technical_indicator) and (technical_indicator) and (technical_indicator):
                 print(stock + " shows potential!")
                 potential_buys[marketCap] = (stock, price)
 
