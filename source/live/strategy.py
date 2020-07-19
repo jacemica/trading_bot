@@ -15,19 +15,19 @@ if __name__ == "__main__":
     pre_market = get_open(date)
     print(pre_market)
 
-    while datetime.datetime.now() < pre_market:
-        print("Waiting for pre-markets...")
-        time.sleep(900)
+    # while datetime.datetime.now() < pre_market:
+    #     print("Waiting for pre-markets...")
+    #     time.sleep(900)
     
     check_sell(api)
-    stocks_dict = find_stocks(api, STOCKS, date) 
-    print("\nPotential stocks: \n", stocks_dict, '\n')    
+    # stocks_dict = find_stocks(api, STOCKS, date) 
+    # print("\nPotential stocks: \n", stocks_dict, '\n')    
 
-    while len(api.list_orders()) > 0:
-        print("Cannot buy stocks until sell orders executed")
-        time.sleep(5)
+    # while len(api.list_orders()) > 0:
+    #     print("Cannot buy stocks until sell orders executed")
+    #     time.sleep(5)
 
-    check_buy(api, stocks_dict)
+    # check_buy(api, stocks_dict)
     
     print("Program Terminated")
-    input("Press ENTER to exit")
+    input("Press ENTER to exit:")
