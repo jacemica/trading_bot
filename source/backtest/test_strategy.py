@@ -28,17 +28,14 @@ class TestStrategy(bt.Strategy):
         # Simply log the closing price of the series from the reference
         # self.log('Close, %.2f' % self.dataclose[0])
         if not self.position:
-            # if (self.stochslow[-1] <= self.stochfast[-1]) and (self.stochfast[-1] <= 20) and (self.dataclose[0] <= self.b[0]):
-            if (self.stochfast[-1] <= 20) and (self.dataclose[0] <= self.b[0]):
+            if (self.stochslow[-1] <= self.stochfast[-1]) and (self.stochfast[-1] <= 20) and (self.dataclose[0] <= self.b[0]):
+                #BLACK STOCHASTIC > RED STOCHASTIC             BLACK STOCHASTIC <= 20         CURRENT PRICE IN LOWER BOLLINGER BAND RANGE
                 self.log('buy')
-                self.log(self.stochfast[-1])
-                self.log(self.stochslow[-1])
-                
                 self.order = self.buy(size = self.shares)
 
         else:
-            # if (self.stochfast[-1] <= self.stochslow[-1]) and (self.stochfast[-1] >= 65) and (self.macd[-1] <= 0):
-            if (self.stochfast[-1] >= 65) and (self.macd[-1] <= 0):
+            if (self.stochfast[-1] <= self.stochslow[-1]) and (self.stochfast[-1] >= 68) and (self.macd[-1] <= 0):
+                #BLACK STOCHASTIC < RED STOCHASTIC             BLACK STOCHASTIC >= 68         MACD NEGATIVE
+            # if (self.stochfast[-1] >= 65) and (self.macd[-1] <= 0):
                 self.log('sell')
-
                 self.order = self.sell(size = self.shares)

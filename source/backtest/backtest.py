@@ -8,12 +8,12 @@ print('Starting Portfolio Value: %.2f' % cerebro.broker.getvalue())
 
 STOCK = 'FB'
 data = bt.feeds.YahooFinanceCSVData(
-    dataname='source/backtest/Historical Data/{}.csv'.format(STOCK),
+    dataname='source/backtest/Historical_Data/{}.csv'.format(STOCK),
 
     # Do not pass values before this date
-    fromdate=datetime.datetime(2019, 1, 1),
+    fromdate=datetime.datetime(2016, 1, 1),
     # Do not pass values after this date
-    todate=datetime.datetime(2019, 12, 31),
+    todate=datetime.datetime(2020, 7, 17),
     reverse=False)
 
 cerebro.adddata(data)
