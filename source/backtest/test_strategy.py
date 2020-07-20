@@ -20,7 +20,7 @@ class TestStrategy(bt.Strategy):
         self.macd = self.macd.histo
 
         self.bb = btind.BBands(self.datas[0])
-        self.b = ((self.bb.mid - self.bb.bot) * 0.33) + self.bb.bot
+        self.b = self.bb.top * .99
 
         self.shares = 1
 
@@ -28,14 +28,15 @@ class TestStrategy(bt.Strategy):
         # Simply log the closing price of the series from the reference
         # self.log('Close, %.2f' % self.dataclose[0])
         if not self.position:
-            if (self.stochslow[-1] <= self.stochfast[-1]) and (self.stochfast[-1] <= 20) and (self.dataclose[0] <= self.b[0]):
+            # if (self.stochslow[-1] <= self.stochfast[-1]) and (self.stochfast[-1] <= 20) and (self.dataclose[0] <= self.b[0]):
+            if self.stochfast[-1] <= 20:
                 #BLACK STOCHASTIC > RED STOCHASTIC             BLACK STOCHASTIC <= 20         CURRENT PRICE IN LOWER BOLLINGER BAND RANGE
                 self.log('buy')
                 self.order = self.buy(size = self.shares)
 
         else:
-            if (self.stochfast[-1] <= self.stochslow[-1]) and (self.stochfast[-1] >= 68) and (self.macd[-1] <= 0):
+            # if (self.stochfast[-1] <= self.stochslow[-1]) and (self.stochfast[-1] >= 65) and (self.macd[-1] <= 0.2) and self.dataclose[0] >= self.b[0]:
+            if self.dataclose[0] >= self.b[0] and self.macd[-1] <= 0.2:
                 #BLACK STOCHASTIC < RED STOCHASTIC             BLACK STOCHASTIC >= 68         MACD NEGATIVE
-            # if (self.stochfast[-1] >= 65) and (self.macd[-1] <= 0):
                 self.log('sell')
                 self.order = self.sell(size = self.shares)
