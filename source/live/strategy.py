@@ -10,7 +10,7 @@ myPicks = ["INTC", "AMD", "NVDA", "IBM", "WDC", "AAPL", "FB", "MSFT", "AMZN", "N
 if __name__ == "__main__":
     api = tradeapi.REST(API_KEY, SEC_KEY, BASE_URL)
     STOCKS = combine_STOCKS(myPicks, get_SPY())
-  
+
     date = datetime.date.today()
     pre_market = get_open(date)
     print(pre_market)
@@ -19,7 +19,7 @@ if __name__ == "__main__":
         print("Waiting for pre-markets...")
         time.sleep(900)
     
-    if check_sell(api):
+    if check_sell(api) or len([position.symbol for position in api.list_positions()]) < 10:
         stocks_dict = find_stocks(api, STOCKS, date) 
         print("\nPotential stocks: \n", stocks_dict, '\n')    
 
