@@ -6,7 +6,7 @@ cerebro = bt.Cerebro()
 cerebro.broker.set_cash(5000)
 print('Starting Portfolio Value: %.2f' % cerebro.broker.getvalue())
 
-STOCK = 'AAPL'
+STOCK = 'KO'
 data = bt.feeds.YahooFinanceCSVData(
     dataname='source/backtest/Historical_Data/{}.csv'.format(STOCK),
 
