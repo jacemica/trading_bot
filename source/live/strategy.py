@@ -15,12 +15,12 @@ if __name__ == "__main__":
     pre_market = get_open(date)
     print(pre_market)
 
-    # while datetime.datetime.now() < pre_market:
-    #     print("Waiting for pre-markets...")
-    #     time.sleep(900)
+    while datetime.datetime.now() < pre_market:
+        print("Waiting for pre-markets...")
+        time.sleep(900)
     
     if check_sell(api) or len([position.symbol for position in api.list_positions()]) < 10:
-        stocks_dict = find_stocks(api, STOCKS, date) 
+        stocks_dict = find_stocks(api, STOCKS) 
         print("\nPotential stocks: \n", stocks_dict, '\n')    
 
         while len(api.list_orders()) > 0:
