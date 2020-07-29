@@ -2,7 +2,7 @@ import backtrader as bt
 import datetime
 from test_strategy import TestStrategy
 
-STOCK = 'GOOG'
+STOCK = 'FB'
 cerebro = bt.Cerebro()
 cerebro.broker.set_cash(5000)
 print('Starting Portfolio Value: %.2f' % cerebro.broker.getvalue())
@@ -14,7 +14,7 @@ data = bt.feeds.YahooFinanceCSVData(
     # Do not pass values before this date
     fromdate=datetime.datetime(2017, 10, 1),
     # Do not pass values after this date
-    todate=datetime.datetime(2020, 7, 21),
+    todate=datetime.datetime(2018, 12, 31),
     reverse=False)
 
 cerebro.adddata(data)

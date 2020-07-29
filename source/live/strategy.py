@@ -15,9 +15,9 @@ if __name__ == "__main__":
     pre_market = get_open(date)
     print(pre_market)
 
-    while datetime.datetime.now() < pre_market:
-        print("Waiting for pre-markets...")
-        time.sleep(900)
+    # while datetime.datetime.now() < pre_market:
+    #     print("Waiting for pre-markets...")
+    #     time.sleep(900)
     
     if check_sell(api) or len([position.symbol for position in api.list_positions()]) < 10:
         stocks_dict = find_stocks(api, STOCKS, date) 
@@ -25,7 +25,7 @@ if __name__ == "__main__":
 
         while len(api.list_orders()) > 0:
             print("Cannot buy stocks until sell orders executed")
-            time.sleep(5)
+            time.sleep(300)
 
         check_buy(api, stocks_dict)
     
