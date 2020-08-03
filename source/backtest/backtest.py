@@ -2,7 +2,7 @@ import backtrader as bt
 import datetime
 from test_strategy import TestStrategy
 
-STOCK = 'IBM'
+STOCK = 'AAPL'
 cerebro = bt.Cerebro()
 cerebro.broker.set_cash(5000)
 print('Starting Portfolio Value: %.2f' % cerebro.broker.getvalue())
