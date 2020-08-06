@@ -34,6 +34,7 @@ if __name__ == "__main__":
             time.sleep(300)
 
         check_buy(live_api, paper_api, stocks_dict)
-    
+
+    print("Current cash available:", live_api.get_account().cash)  
     print("Program Terminated")
     input("Press ENTER to exit:")
