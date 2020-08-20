@@ -12,9 +12,9 @@ data = bt.feeds.YahooFinanceCSVData(
     dataname='source/backtest/Historical_Data/{}.csv'.format(STOCK),
 
     # Do not pass values before this date
-    fromdate=datetime.datetime(2019, 10, 1),
+    fromdate=datetime.datetime(2017, 10, 1),
     # Do not pass values after this date
-    todate=datetime.datetime(2020, 7, 14),
+    todate=datetime.datetime(2018, 12, 31),
     reverse=False)
 
 cerebro.adddata(data)
