@@ -12,6 +12,7 @@ myPicks = {"TWTR", "DBX", "WORK", "SQ", "SNE", "LYFT", "UBER"}
 if __name__ == "__main__":
     paper_api = tradeapi.REST(PAPER_API_KEY, PAPER_SEC_KEY, PAPER_BASE_URL)
     live_api = tradeapi.REST(LIVE_API_KEY, LIVE_SEC_KEY, LIVE_BASE_URL)
+    print("\nCurrent cash available:", live_api.get_account().cash) 
 
     cooldown()
 
