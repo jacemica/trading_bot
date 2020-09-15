@@ -6,29 +6,31 @@ import datetime, time, requests
 
 PAPER_BASE_URL = "https://paper-api.alpaca.markets"
 LIVE_BASE_URL = "https://api.alpaca.markets"
-
-myPicks = {"TWTR", "DBX", "WORK", "SQ", "SNE", "LYFT", "UBER"}
+STOCKS = ['ADBE', 'AMD', 'GOOGL', 'GOOG', 'AMZN', 'AAPL', 'ADSK', 'AVGO', \
+            'CSCO', 'CTXS', 'CMCSA', 'COST', 'DOCU', 'EBAY', 'EA', 'FB', \
+            'FISV', 'INTC', 'INTU', 'ISRG', 'KHC', 'MXIM', 'MCHP', 'MU', \
+            'MSFT', 'NFLX', 'NVDA', 'PYPL', 'PEP', 'QCOM', 'SWKS', 'SPLK', \
+            'SBUX', 'SNPS', 'TMUS', 'TTWO', 'TSLA', 'TXN', 'VRSN', 'WDAY', \
+            'WDC', 'XLNX', 'ZM', 'CRM', 'V', 'MA', 'AXP', 'BAC', 'DIS', \
+            'IBM', 'JNJ', 'JPM', 'KO', 'MCD', 'ORCL', 'TGT', 'TWTR', 'DBX', \
+            'WORK', 'SQ', 'SNE', 'LYFT', 'UBER', 'TWLO', 'ROKU', 'Z', 'DELL',
+            'XLK',]
 
 if __name__ == "__main__":
-    paper_api = tradeapi.REST(PAPER_API_KEY, PAPER_SEC_KEY, PAPER_BASE_URL)
     live_api = tradeapi.REST(LIVE_API_KEY, LIVE_SEC_KEY, LIVE_BASE_URL)
     print("\nCurrent cash available:", live_api.get_account().cash) 
 
     cooldown()
 
-    SP = 'https://en.wikipedia.org/wiki/S%26P_100#Components'
-    NDX = 'https://en.wikipedia.org/wiki/NASDAQ-100#Components'
-    STOCKS = myPicks.union(get_tickers(SP), get_tickers(NDX))
-
     date = datetime.date.today()
     pre_market = get_open(date)
     print(pre_market)
 
-    while datetime.datetime.now() < pre_market:
-        print("Waiting for pre-markets...")
-        time.sleep(900)
+    # while datetime.datetime.now() < pre_market:
+    #     print("Waiting for pre-markets...")
+    #     time.sleep(900)
     
-    if check_sell(live_api, paper_api) or len([position.symbol for position in live_api.list_positions()]) < 5:
+    if check_sell(live_api) or len([position.symbol for position in live_api.list_positions()]) < 5:
         stocks_dict = find_stocks(live_api, STOCKS) 
         print("\nPotential stocks: \n", stocks_dict, '\n')    
 
@@ -36,7 +38,7 @@ if __name__ == "__main__":
             print("Cannot buy stocks until sell orders executed")
             time.sleep(300)
 
-        check_buy(live_api, paper_api, stocks_dict)
+        check_buy(live_api, stocks_dict)
 
     print("\nCurrent cash available:", live_api.get_account().cash)  
     print("Program Terminated")
