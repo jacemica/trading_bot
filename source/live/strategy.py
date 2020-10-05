@@ -13,8 +13,9 @@ STOCKS = ['ADBE', 'AMD', 'GOOGL', 'GOOG', 'AMZN', 'AAPL', 'ADSK', 'AVGO', \
             'SBUX', 'SNPS', 'TMUS', 'TTWO', 'TSLA', 'TXN', 'VRSN', 'WDAY', \
             'WDC', 'XLNX', 'ZM', 'CRM', 'V', 'MA', 'AXP', 'BAC', 'DIS', \
             'IBM', 'JNJ', 'JPM', 'KO', 'MCD', 'ORCL', 'TGT', 'TWTR', 'DBX', \
-            'WORK', 'SQ', 'SNE', 'LYFT', 'UBER', 'TWLO', 'ROKU', 'Z', 'DELL',
-            'XLK',]
+            'WORK', 'SQ', 'SNE', 'LYFT', 'UBER', 'TWLO', 'ROKU', 'Z', 'DELL', \
+            'TXN', 'QRVO', 'GLW', 'ASML', 'TSM', 'APD', 'A', 'KLAC', 'WMT', \
+            'MCO', 'CHTR', 'MRVL']
 
 if __name__ == "__main__":
     live_api = tradeapi.REST(LIVE_API_KEY, LIVE_SEC_KEY, LIVE_BASE_URL)
@@ -34,7 +35,7 @@ if __name__ == "__main__":
         stocks_dict = find_stocks(live_api, STOCKS) 
         print("\nPotential stocks: \n", stocks_dict, '\n')    
 
-        while len(live_api.list_orders()) > 0:
+        while len([order.symbol for order in live_api.list_orders() if order.order_type != 'trailing_stop']) > 0:
             print("Cannot buy stocks until sell orders executed")
             time.sleep(300)
 
